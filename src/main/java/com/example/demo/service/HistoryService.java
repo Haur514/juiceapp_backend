@@ -1,39 +1,50 @@
 package com.example.demo.service;
 
-import java.util.Date;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.entity.HistoryEntity;
 import com.example.demo.repository.HistoryRepository;
 
-@Service
+@Controller
+@Transactional
 public class HistoryService {
+    @Autowired
     HistoryRepository historyRepository;
-    
 
-    /**
-     * 全履歴の取得
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public List<HistoryEntity> historyList() {
+    public List<HistoryEntity> findAllHistory(){
         return historyRepository.findAll();
     }
 
-    /**
-     * 履歴の追加
-     */
-    @Transactional
-    public void insertHistory(Long id,String user,String item,int price,Date date){
-        HistoryEntity history = new HistoryEntity();
-        history.setUser(user);
-        history.setId(id);
-        history.setItem(item);
-        history.setPrice(price);
-        history.setDate(date);
-        historyRepository.save(history);
+    public List<HistoryEntity> findByName(String name){
+        return historyRepository.findByName(name);
+    }
+
+    public String removeHistory(int id,String name){
+        try{
+            HistoryEntity historyEntityFoundById = historyRepository.getReferenceById(id);
+            if(historyEntityFoundById.getName().equals(name)){
+                historyRepository.deleteById(id);
+                return "success";
+            }else{
+                return "false";
+            }
+        }catch(Exception e){
+            return "failed";
+        }
+    }
+
+
+    public String insertHistory(String name, String item, int price) {
+        HistoryEntity historyEntity = new HistoryEntity();
+        historyEntity.setName(name);
+        historyEntity.setItem(item);
+        historyEntity.setPrice(price);
+        historyEntity.setDate(new java.sql.Date(new java.util.Date().getTime()));
+        historyRepository.save(historyEntity);
+        return "success";
     }
 }

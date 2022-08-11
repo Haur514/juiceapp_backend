@@ -1,0 +1,17 @@
+
+server:
+    port: 5050
+
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/testdb
+    username: h-yosiok
+    password: postgres
+  jpa:
+    database: POSTGRESQL
+
+logging:
+  level:
+    root: INFO

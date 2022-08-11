@@ -6,23 +6,24 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.springframework.data.annotation.Id;
 
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "history")
+@Table(name="history")
 public class HistoryEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private long id;
 
-    @Column(name = "user")
-    private String user;
+    public HistoryEntity(){}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "item")
     private String item;
