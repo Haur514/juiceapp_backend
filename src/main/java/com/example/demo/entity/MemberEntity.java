@@ -16,9 +16,9 @@ public class MemberEntity {
     @Column(name="name")
     private String name;
 
-    @Column(name="displayName")
+    @Column(name="displayname")
     private String displayName;
 
-    @Column(name="unpayedAmount")
+    @Column(name="unpayedamount")
     private int umpayedAmount;
 }

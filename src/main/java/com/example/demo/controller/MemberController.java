@@ -24,8 +24,14 @@ public class MemberController {
 
     @PostMapping
     @RequestMapping("/deleteMember")
-    public String cancelHistory(@RequestParam("name") String name){
+    public String cacelHistory(@RequestParam("name") String name){
         return memberService.deleteMember(name);
+    }
+
+    @PostMapping
+    @RequestMapping("/setUnpayedAmount")
+    public String setUnpayedAmount(@RequestParam("name") String name,@RequestParam("unpayedAmount") String unpayedAmount){
+        return memberService.setUnpayedAmount(name, Integer.parseInt(unpayedAmount));
     }
 
      @RequestMapping("/activeMembers")
