@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.service.MemberService;
+import com.google.gson.Gson;
 
 @RestController
 @EnableAutoConfiguration
@@ -36,6 +37,7 @@ public class MemberController {
 
      @RequestMapping("/activeMembers")
      public String getActiveMembers(){
-        return "hoge";
+        Gson gson = new Gson();
+        return gson.toJson(memberService.getAllMembers());
      }
 }

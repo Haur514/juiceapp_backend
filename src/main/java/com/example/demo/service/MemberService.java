@@ -54,6 +54,5 @@ public class MemberService {
         memberEntity.setUmpayedAmount(unpayedamount);
         memberRepository.save(memberEntity);
         return "success";
-    }
-    
+    }    
 }
