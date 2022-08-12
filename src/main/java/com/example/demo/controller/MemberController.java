@@ -45,12 +45,6 @@ public class MemberController {
         return memberService.deleteMember(name);
     }
 
-    // @PostMapping
-    // @RequestMapping("/setUnpayedAmount")
-    // public String setUnpayedAmount(@RequestParam("name") String name,@RequestParam("unpayedAmount") String unpayedAmount){
-    //     return memberService.setUnpayedAmount(name, Integer.parseInt(unpayedAmount));
-    // }
-
      @RequestMapping("/member/find")
      public String getActiveMembers(
         @RequestParam(name="name",defaultValue="") String name,
