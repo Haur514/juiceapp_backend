@@ -21,4 +21,7 @@ public class MemberEntity {
 
     @Column(name="unpayedamount")
     private int umpayedAmount;
+
+    @Column(name="attribute")
+    private String attribute;
 }

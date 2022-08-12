@@ -21,14 +21,14 @@ public class HistoryController {
     HistoryService historyService;
 
     @PostMapping
-    @RequestMapping("/purchased")
+    @RequestMapping("/history/add")
     public String insertHistory(@RequestParam("name") String name,@RequestParam("item") String item,@RequestParam("price") String price){
         int p = Integer.parseInt(price);
         return historyService.insertHistory(name,item,p);
     }
 
     @PostMapping
-    @RequestMapping("/cancel")
+    @RequestMapping("/history/delete")
     public String cancelHistory(@RequestParam("name") String name,@RequestParam("id") String id){
         return historyService.removeHistory(Integer.parseInt(id), name);
     }

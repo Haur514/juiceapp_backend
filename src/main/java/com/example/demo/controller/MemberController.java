@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.service.MemberService;
-import com.google.gson.Gson;
 
 @RestController
 @EnableAutoConfiguration
@@ -18,26 +17,45 @@ public class MemberController {
     MemberService memberService;
 
     @PostMapping
-    @RequestMapping("/addMember")
-    public String insertHistory(@RequestParam("name") String name,@RequestParam("displayName") String displayName){
-        return memberService.addMember(name,displayName);
+    @RequestMapping("/member/add")
+    public String addMember(
+        @RequestParam(name="name") String name,
+        @RequestParam(name="displayName") String displayName,
+        @RequestParam(name="attribute") String attribute
+    ){
+        return memberService.addMember(name,displayName,attribute);
     }
 
     @PostMapping
-    @RequestMapping("/deleteMember")
-    public String cacelHistory(@RequestParam("name") String name){
+    @RequestMapping("/member/update")
+    public String updateMember(
+        @RequestParam(name="name") String name,
+        @RequestParam(name="displayName",defaultValue="") String displayName,
+        @RequestParam(name="unpayedAmount",defaultValue="") String unpayedAmount,
+        @RequestParam(name="attribute",defaultValue="") String attribute
+    ){
+        return memberService.updateMember(name,displayName,unpayedAmount,attribute);
+    }
+
+    @PostMapping
+    @RequestMapping("/member/delete")
+    public String deleteMember(
+        @RequestParam("name") String name
+    ){
         return memberService.deleteMember(name);
     }
 
-    @PostMapping
-    @RequestMapping("/setUnpayedAmount")
-    public String setUnpayedAmount(@RequestParam("name") String name,@RequestParam("unpayedAmount") String unpayedAmount){
-        return memberService.setUnpayedAmount(name, Integer.parseInt(unpayedAmount));
-    }
+    // @PostMapping
+    // @RequestMapping("/setUnpayedAmount")
+    // public String setUnpayedAmount(@RequestParam("name") String name,@RequestParam("unpayedAmount") String unpayedAmount){
+    //     return memberService.setUnpayedAmount(name, Integer.parseInt(unpayedAmount));
+    // }
 
-     @RequestMapping("/activeMembers")
-     public String getActiveMembers(){
-        Gson gson = new Gson();
-        return gson.toJson(memberService.getAllMembers());
+     @RequestMapping("/member/find")
+     public String getActiveMembers(
+        @RequestParam(name="name",defaultValue="") String name,
+        @RequestParam(name="attribute",defaultValue="") String attribute
+     ){
+        return memberService.findMembers(name,attribute);
      }
 }
