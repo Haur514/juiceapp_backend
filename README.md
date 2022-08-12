@@ -2,6 +2,6 @@
 
 # HOW TO USE
 ```
-bash ./gradlew bootRun
+./gradlew bootRun
 ```
 [localhost:5050](http://localhost:5050)にアクセスすれば利用できます．
