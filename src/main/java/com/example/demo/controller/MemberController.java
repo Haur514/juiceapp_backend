@@ -45,7 +45,7 @@ public class MemberController {
         return memberService.deleteMember(name);
     }
 
-     @RequestMapping("/member/find")
+     @RequestMapping("/member")
      public String getActiveMembers(
         @RequestParam(name="name",defaultValue="") String name,
         @RequestParam(name="attribute",defaultValue="") String attribute
