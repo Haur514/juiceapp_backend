@@ -23,6 +23,16 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
+    public String purchased(String name,int price){
+        MemberEntity memberEntity = memberRepository.findByName(name);
+        if(memberEntity==null){
+            return "failed";
+        }
+        memberEntity.setUmpayedAmount(memberEntity.getUmpayedAmount()+price);
+        memberRepository.save(memberEntity);
+        return "success";
+    }
+
     public String findMembers(String name,String attribute){
         List<MemberEntity> memberEntityList = findMembersByAttribute(attribute);
         if(!name.equals("")){
@@ -43,7 +53,7 @@ public class MemberService {
 
     public String deleteMember(String name){
         try{
-            if(memberRepository.findByName(name).isEmpty()){
+            if(memberRepository.findByName(name) == null){
                 return "failed";
             }else{
                 memberRepository.deleteByName(name);
@@ -60,10 +70,10 @@ public class MemberService {
         String unpayedAmount,
         String attribute
     ){
-        if(memberRepository.findByName(name).isEmpty()){
+        if(memberRepository.findByName(name)==null){
             return "failed";
         }
-        MemberEntity memberEntity = memberRepository.findByName(name).get(0);
+        MemberEntity memberEntity = memberRepository.findByName(name);
         String tmp_displayName = displayName.equals("") ? memberEntity.getDisplayName() : displayName;
         int tmp_unpayedAmount = unpayedAmount.equals("") ? memberEntity.getUmpayedAmount() : Integer.parseInt(unpayedAmount);
         String tmp_attribute = attribute.equals("") ? memberEntity.getAttribute() : attribute;
@@ -76,7 +86,7 @@ public class MemberService {
 
     public String addMember(String name,String displayName,String attribute){
         // 既に登録済みかチェック
-        if(!memberRepository.findByName(name).isEmpty()){
+        if(!(memberRepository.findByName(name)==null)){
             return "failed";
         }
         MemberEntity memberEntity = new MemberEntity();
@@ -89,10 +99,10 @@ public class MemberService {
     }
 
     public String setUnpayedAmount(String name,int unpayedamount){
-        if(memberRepository.findByName(name).isEmpty()){
+        if(memberRepository.findByName(name)==null){
             return "failed";
         }
-        MemberEntity memberEntity = memberRepository.findByName(name).get(0);
+        MemberEntity memberEntity = memberRepository.findByName(name);
         memberEntity.setUmpayedAmount(unpayedamount);
         memberRepository.save(memberEntity);
         return "success";
