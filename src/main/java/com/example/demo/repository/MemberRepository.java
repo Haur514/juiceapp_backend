@@ -19,7 +19,7 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Integer>{
         ;
     """,
         nativeQuery = true)
-    public List<MemberEntity> findByName(String name);
+    public List<MemberEntity> findByName(String name);  
     public List<MemberEntity> findByAttribute(String attribute);
     public void deleteByName(String name);
 }
