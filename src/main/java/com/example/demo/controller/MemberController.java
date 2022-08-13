@@ -45,17 +45,22 @@ public class MemberController {
         return memberService.deleteMember(name);
     }
 
-    // @PostMapping
-    // @RequestMapping("/setUnpayedAmount")
-    // public String setUnpayedAmount(@RequestParam("name") String name,@RequestParam("unpayedAmount") String unpayedAmount){
-    //     return memberService.setUnpayedAmount(name, Integer.parseInt(unpayedAmount));
-    // }
-
-     @RequestMapping("/member/find")
+     @RequestMapping("/member")
      public String getActiveMembers(
         @RequestParam(name="name",defaultValue="") String name,
         @RequestParam(name="attribute",defaultValue="") String attribute
      ){
         return memberService.findMembers(name,attribute);
      }
+
+     @RequestMapping("/member/ranking")
+     public String getMemberRanking(){
+        return memberService.getMemberRanking();
+     }
+
+     @RequestMapping("/member/unpayed")
+     public String getMemberWithUnpayedAmount(){
+        return memberService.getMemberWithUnpayedAmount();
+     }
+
 }
