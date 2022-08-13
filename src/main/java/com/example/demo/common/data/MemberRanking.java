@@ -1,4 +1,4 @@
-package com.example.demo.data;
+package com.example.demo.common.data;
 
 public record MemberRanking(
     String name,
