@@ -52,4 +52,9 @@ public class MemberController {
      ){
         return memberService.findMembers(name,attribute);
      }
+
+     @RequestMapping("/member/ranking")
+     public String getMemberRanking(){
+        return memberService.getMemberRanking();
+     }
 }

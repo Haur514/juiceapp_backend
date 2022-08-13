@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.common.ManipulateMemberList;
 import com.example.demo.entity.MemberEntity;
 import com.example.demo.repository.MemberRepository;
 import com.google.gson.Gson;
@@ -95,5 +96,12 @@ public class MemberService {
         memberEntity.setUmpayedAmount(unpayedamount);
         memberRepository.save(memberEntity);
         return "success";
-    }    
+    }
+
+    public String getMemberRanking(){
+        List<MemberEntity> memberEntityList = memberRepository.findAll();
+        return new ManipulateMemberList().getMembersRanking(memberEntityList);
+    }
+
+
 }
