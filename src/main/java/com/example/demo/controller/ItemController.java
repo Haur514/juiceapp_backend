@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.service.ItemService;
 
+
 @RestController
 @EnableAutoConfiguration
 public class ItemController {
@@ -43,5 +44,24 @@ public class ItemController {
         return itemService.deleteItem(name);
     }
 
+    @PostMapping
+    @RequestMapping("/item/update")
+    public String updateItem(
+        @RequestParam(name="name") String name,
+        @RequestParam(name="sellingPrice",defaultValue="") String sellingPrice,
+        @RequestParam(name="costPrice",defaultValue="") String costPrice,
+        @RequestParam(name="grouping",defaultValue="") String grouping,
+        @RequestParam(name="salesFigure",defaultValue="") String salesFigure
+    ){
+        return itemService.updateItem(name,sellingPrice,costPrice,grouping,salesFigure);
+    }
+
+
+    @PostMapping
+    @RequestMapping("/item/ranking")
+    public String getItemRanking(){
+        return itemService.getItemRanking();
+    }
+    
 
 }
