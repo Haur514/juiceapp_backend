@@ -42,6 +42,16 @@ public class ItemService {
         return "success";
     }
 
+    public String purchased(String name){
+        ItemEntity itemEntity = itemRepository.findByName(name);
+        if(itemEntity == null){
+            return "failed";
+        }
+        itemEntity.setSalesFigure(itemEntity.getSalesFigure()+1);
+        itemRepository.save(itemEntity);
+        return "success";
+    }
+
     public String updateItem(
         String name,
         String sellingPrice,
