@@ -103,5 +103,12 @@ public class MemberService {
         return new ManipulateMemberList().getMembersRanking(memberEntityList);
     }
 
+    public String getMemberWithUnpayedAmount(){
+        List<MemberEntity> memberEntityList = memberRepository.findAll();
+        List<MemberEntity> memberWithUnpayedAmount = memberEntityList.stream()
+            .filter(x -> x.getUmpayedAmount() > 0)
+            .collect(Collectors.toList());
+        return new Gson().toJson(memberWithUnpayedAmount);
+    }
 
 }

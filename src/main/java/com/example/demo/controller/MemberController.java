@@ -57,4 +57,10 @@ public class MemberController {
      public String getMemberRanking(){
         return memberService.getMemberRanking();
      }
+
+     @RequestMapping("/member/unpayed")
+     public String getMemberWithUnpayedAmount(){
+        return memberService.getMemberWithUnpayedAmount();
+     }
+
 }
