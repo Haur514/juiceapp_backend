@@ -4,6 +4,8 @@
 
 # HOW TO USE
 ```
+postgresの設定（後日スクリプトで配布予定）
+データサーバを5432ポートで立てて利用してください．
 ./gradlew bootRun
 ```
 [localhost:5050](http://localhost:5050)にアクセスすれば利用できます．
