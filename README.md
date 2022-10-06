@@ -4,8 +4,10 @@
 
 # HOW TO USE
 ```
-postgresの設定（後日スクリプトで配布予定）
-データサーバを5432ポートで立てて利用してください．
+git clone https://github.com/Haur514/JuiceApp_backend.git
+cd juice-app-backend
+psql -h localhost -d "testdb" -p 5432
+python3.9 ./script/init-script/init-database.py
 ./gradlew bootRun
 ```
 [localhost:5050](http://localhost:5050)にアクセスすれば利用できます．
