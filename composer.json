@@ -1,7 +1,0 @@
-{
-    "name": "php-sandbox/simple",
-    "description": "php sandbox",
-    "require": {
-      "phpunit/phpunit": "^9"
-    }
-  }
