@@ -6,11 +6,17 @@
 ```
 git clone https://github.com/Haur514/JuiceApp_backend.git
 cd juice-app-backend
-psql -h localhost -d "testdb" -p 5432
-python3.9 ./script/init-script/init-database.py
+docker-compose up -d
 ./gradlew bootRun
 ```
 [localhost:5050](http://localhost:5050)にアクセスすれば利用できます．
+
+各種テーブルが作成されていない場合，以下を実行してください．初期passwordはpassです．
+```
+psql -h 127.0.0.1 -p 5433 -U admin test-db -f ./script/init/init-item.sql
+psql -h 127.0.0.1 -p 5433 -U admin test-db -f ./script/init/init-history.sql
+psql -h 127.0.0.1 -p 5433 -U admin test-db -f ./script/init/init-member.sql
+```
 
 
 ## 動作例
