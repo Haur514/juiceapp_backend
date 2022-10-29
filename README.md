@@ -5,8 +5,12 @@
 # HOW TO USE
 ```
 git clone https://github.com/Haur514/JuiceApp_backend.git
-cd juice-app-backend
+cd JuiceApp_backend
 docker-compose up -d
+docker exec -it postgresql bash
+/docker-entrypoint-initdb.d/init-script.sh
+exit
+exit
 ./gradlew bootRun
 ```
 [localhost:5050](http://localhost:5050)にアクセスすれば利用できます．
