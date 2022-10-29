@@ -7,9 +7,7 @@
 git clone https://github.com/Haur514/JuiceApp_backend.git
 cd JuiceApp_backend
 docker-compose up -d
-docker exec -it postgresql bash
-/docker-entrypoint-initdb.d/00_init-script.sh
-exit
+docker exec -it postgresql bash /docker-entrypoint-initdb.d/00_init-script.sh 
 ./gradlew bootRun
 ```
 [localhost:5050](http://localhost:5050)にアクセスすれば利用できます．
