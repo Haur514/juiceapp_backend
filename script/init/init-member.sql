@@ -1,5 +1,3 @@
-\c test-db
-
 CREATE TABLE member(
     name varchar(20),
     displayname varchar(20),

@@ -1,10 +1,10 @@
-version: '3'
+version: '3.9'
 
 volumes:
   postgres_volume:
     driver_opts:
       type: none
-      device: $PWD/dbdata
+      device: ./dbdata
       o: bind
 
 services:
@@ -14,10 +14,10 @@ services:
     ports:
       - 5433:5432
     volumes:
-      - postgres_volume:/var/lib/postgresql/data
+      - ./dbdata:/var/lib/postgresql/data
       - ./script/init:/docker-entrypoint-initdb.d
     environment:
-      POSTGRES_USER: admin
+      POSTGRES_USER: haruka
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: test-db
     restart: always

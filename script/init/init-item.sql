@@ -1,5 +1,3 @@
-\c test-db
-
 CREATE TABLE item (
     name varchar(20),
     sellingprice integer,

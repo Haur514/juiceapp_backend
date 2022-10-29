@@ -1,5 +1,3 @@
-\c test-db
-
 CREATE TABLE history (
     id serial primary key,
     name varchar(20),
