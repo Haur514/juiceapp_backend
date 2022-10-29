@@ -33,8 +33,9 @@ build/
 .vscode/
 
 .DS_Store
-!.gitkeep
+
+/dbdata/*
+!/dbdata/.gitkeep
 
 /figure/fig_factory.pptx
 
-/dbdata/*
