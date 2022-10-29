@@ -1,6 +1,13 @@
 #!/usr/bin/python
 import psycopg2
 
+##############
+# 環境変数
+hostname = "127.0.0.1"
+username = "admin"
+##############
+
+
 def table_exist(cur,table):
     cur.execute("select exists(select * from information_schema.tables where table_name=%s)",(table,))
     return cur.fetchone()[0]
@@ -12,7 +19,13 @@ def database_exist(cur,database):
     '''
 
 try:
-    conn = psycopg2.connect(database = "testdb", host = "localhost", port = "5432")
+    conn = psycopg2.connect(
+        database = "test-db", 
+        host = hostname, 
+        port = "5433", 
+        password='pass',
+        user=username
+        )
 except:
     print("Database not found...")
     sql =   '''
