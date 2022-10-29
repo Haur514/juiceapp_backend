@@ -33,6 +33,7 @@ build/
 .vscode/
 
 .DS_Store
+!.gitkeep
 
 /figure/fig_factory.pptx
 
