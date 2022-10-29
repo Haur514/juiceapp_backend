@@ -7,7 +7,7 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/test-db
-    username: admin
+    username: haruka
     password: pass
   jpa:
     database: POSTGRESQL
