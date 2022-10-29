@@ -1,12 +1,39 @@
-<img width="279" alt="image" src="https://user-images.githubusercontent.com/82633228/184471629-6dd30103-876a-4976-9c84-8571eecd62c6.png">
+<img src = https://user-images.githubusercontent.com/82633228/184471700-2a3c1386-01ac-482e-a5b6-dd6cb2176dc8.png width=50%>
 
-会計アプリのバックグラウンドです．
+会計アプリのバックエンドです．
 
 # HOW TO USE
 ```
-bash ./gradlew bootRun
+git clone https://github.com/Haur514/JuiceApp_backend.git
+cd JuiceApp_backend
+docker-compose up -d
+docker exec -it postgresql bash
+/docker-entrypoint-initdb.d/00_init-script.sh
+exit
+./gradlew bootRun
 ```
 [localhost:5050](http://localhost:5050)にアクセスすれば利用できます．
+
+各種テーブルが作成されていない場合，以下を実行してください．初期passwordはpassです．
+```
+psql -h 127.0.0.1 -p 5433 -U admin test-db -f ./script/init/init-item.sql
+psql -h 127.0.0.1 -p 5433 -U admin test-db -f ./script/init/init-history.sql
+psql -h 127.0.0.1 -p 5433 -U admin test-db -f ./script/init/init-member.sql
+```
+
+## 開発メモ
+docker-compose.ymlを書き換えた時は，以下コマンドを実行すると良いかも．
+コンテナの作成時に1度だけ実行されるスクリプトとかがあるから．
+```
+docker-compose down -v
+```
+
+
+## 動作例
+
+https://user-images.githubusercontent.com/82633228/191949624-00512f5f-d5ff-4df6-a332-996e9fb08469.mp4
+
+
 
 
 
