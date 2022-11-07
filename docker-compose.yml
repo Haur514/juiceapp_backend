@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3'
 
 volumes:
   postgres_volume:
@@ -17,7 +17,7 @@ services:
       - ./dbdata:/var/lib/postgresql/data
       - ./script/init:/docker-entrypoint-initdb.d
     environment:
-      POSTGRES_USER: haruka
+      POSTGRES_USER: admin
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: test-db
     restart: always

@@ -7,6 +7,7 @@
 git clone https://github.com/Haur514/JuiceApp_backend.git
 cd JuiceApp_backend
 docker-compose up -d
+rm ./dbdata/.gitkeep
 docker exec -it postgresql bash /docker-entrypoint-initdb.d/00_init-script.sh 
 ./gradlew bootRun
 ```
