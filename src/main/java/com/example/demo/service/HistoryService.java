@@ -47,4 +47,16 @@ public class HistoryService {
         historyRepository.save(historyEntity);
         return "success";
     }
+
+    public boolean isRegistered(int id, String name) {
+        try{
+            HistoryEntity historyEntityFoundById = historyRepository.getReferenceById(id);
+            if(historyEntityFoundById.getName().equals(name)){
+                return true;
+            }
+            return false;
+        }catch(Exception e){
+            return false;
+        }
+    }
 }

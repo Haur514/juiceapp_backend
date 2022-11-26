@@ -42,14 +42,36 @@ public class ItemService {
         return "success";
     }
 
-    public String purchased(String name){
+    // 商品が既に登録されているか
+    public boolean isRegistered(String name){
+        if(itemRepository.findByName(name)==null){
+            return false;
+        }
+        return true;
+    }
+
+
+    // 商品購入時に呼び出し
+    public boolean purchased(String name){
         ItemEntity itemEntity = itemRepository.findByName(name);
         if(itemEntity == null){
-            return "failed";
+            return false;
         }
         itemEntity.setSalesFigure(itemEntity.getSalesFigure()+1);
         itemRepository.save(itemEntity);
-        return "success";
+        return true;
+    }
+
+    // 商品取り消し時に呼び出し
+    // 成功 true 失敗 false
+    public boolean recalled(String name){
+        ItemEntity itemEntity = itemRepository.findByName(name);
+        if(itemEntity==null){
+            return false;
+        }
+        itemEntity.setSalesFigure(itemEntity.getSalesFigure()-1);
+        itemRepository.save(itemEntity);
+        return true;
     }
 
     public String updateItem(

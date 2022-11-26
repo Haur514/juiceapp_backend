@@ -23,16 +23,6 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public String purchased(String name,int price){
-        MemberEntity memberEntity = memberRepository.findByName(name);
-        if(memberEntity==null){
-            return "failed";
-        }
-        memberEntity.setUmpayedAmount(memberEntity.getUmpayedAmount()+price);
-        memberRepository.save(memberEntity);
-        return "success";
-    }
-
     public String findMembers(String name,String attribute){
         List<MemberEntity> memberEntityList = findMembersByAttribute(attribute);
         if(!name.equals("")){
@@ -62,6 +52,14 @@ public class MemberService {
         }catch(Exception e){
             return "failed";
         }
+    }
+
+    // 既に登録積みのユーザかチェック
+    public boolean isRegistered(String name){
+        if(memberRepository.findByName(name) == null){
+            return false;
+        }
+        return true;
     }
 
     public String updateMember(
@@ -119,6 +117,28 @@ public class MemberService {
             .filter(x -> x.getUmpayedAmount() > 0)
             .collect(Collectors.toList());
         return new Gson().toJson(memberWithUnpayedAmount);
+    }
+
+    // 商品が購入された時のmemberServiceの動作
+    public String purchased(String name,int price){
+        MemberEntity memberEntity = memberRepository.findByName(name);
+        if(memberEntity==null){
+            return "failed";
+        }
+        memberEntity.setUmpayedAmount(memberEntity.getUmpayedAmount()+price);
+        memberRepository.save(memberEntity);
+        return "success";
+    }
+
+    // 商品がキャンセルされた時のmemberServiceの動作
+    public boolean recalled(String name,int price) {
+        MemberEntity memberEntity = memberRepository.findByName(name);
+        if(memberEntity==null){
+            return false;
+        }
+        memberEntity.setUmpayedAmount(memberEntity.getUmpayedAmount()-price);
+        memberRepository.save(memberEntity);
+        return true;
     }
 
 }

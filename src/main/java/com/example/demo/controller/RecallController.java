@@ -16,7 +16,7 @@ import com.example.demo.service.MemberService;
 
 @RestController
 @EnableAutoConfiguration
-public class PurchaseController {
+public class RecallController {
     @Autowired HistoryService historyService;
     @Autowired ItemService itemService;
     @Autowired MemberService memberService;
@@ -25,10 +25,12 @@ public class PurchaseController {
     @Autowired MemberRepository memberRepository;
 
 
-    @RequestMapping("/purchase")
+    @RequestMapping("/recall")
     public String purchaseItem(
         @RequestParam("name") String name,
-        @RequestParam("item") String item
+        @RequestParam("item") String item,
+        @RequestParam("id") String id,
+        @RequestParam("price") String price
     ){
         ItemEntity purchasedItem = itemRepository.findByName(item);
         if(purchasedItem == null){
@@ -38,20 +40,24 @@ public class PurchaseController {
         if(purchasedMember == null){
             return "failed";
         }
-        int price = purchasedItem.getSellingPrice();
-        
-        if(!canPurchase(name, item, price)){
+        // int price = purchasedItem.getSellingPrice();
+        if(!canRecall(Integer.parseInt(id), name, item)){
             return "failed";
         }
 
-        historyService.insertHistory(name,item,price);
-        itemService.purchased(item);
-        memberService.purchased(name,price);
+        historyService.removeHistory(Integer.parseInt(id),name);
+        itemService.recalled(item);
+        memberService.recalled(name,Integer.parseInt(price));
+
         return "success";
     }
 
-    // 購入処理を進める前に，購入が可能かどうかを判定する．
-    public boolean canPurchase(String name,String item,int price){
+    // recall可能か判定
+    public boolean canRecall(int id,String name,String item){
+        // 指定されたhistoryのidは登録されており，なおかつ購入者のnameはidと一致しているか
+        if(!historyService.isRegistered(id,name)){
+            return false;
+        }
         // 入力された名前が名簿に登録済みか
         if(!memberService.isRegistered(name)){
             return false;
