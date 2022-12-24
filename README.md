@@ -70,6 +70,12 @@ https://user-images.githubusercontent.com/82633228/191949624-00512f5f-d5ff-4df6-
 ```
 /member/unpayed
 ```
+
+#### 各月の売り上げ取得
+* 現在の時刻を取得し，そこから過去1年分のデータを取得
+```
+/history/eachmonth
+```
 ### POST
 #### ユーザ管理周り
 
@@ -95,8 +101,6 @@ dispayNameは表示用の名前
     [displayName=huga]
     [attribute=m1,m2,...]
 ```
-
-
 
 #### 購入履歴管理周り
 
