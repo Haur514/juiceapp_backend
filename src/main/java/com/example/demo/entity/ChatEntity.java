@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,4 +23,7 @@ public class ChatEntity {
 
     @Column(name = "message")
     private String message;
+
+    @Column(name = "date")
+    private Date date;
 }

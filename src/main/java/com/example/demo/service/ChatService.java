@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ public class ChatService {
     public String insertChat(String message) {
         ChatEntity chatEntity = new ChatEntity();
         chatEntity.setMessage(message);
+        chatEntity.setDate(new Date());
         chatRepository.save(chatEntity);
         return "success";
     }
