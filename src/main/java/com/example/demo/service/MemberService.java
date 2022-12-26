@@ -41,6 +41,10 @@ public class MemberService {
         }
     }
 
+    public MemberEntity findByName(String name){
+        return memberRepository.findByName(name);
+    }
+
     public String deleteMember(String name){
         try{
             if(memberRepository.findByName(name) == null){
