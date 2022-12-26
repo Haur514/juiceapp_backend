@@ -10,4 +10,10 @@ class DemoApplicationTests {
 	void contextLoads() {
 	}
 
+	// @Test
+	// public void testHistoryController(){
+	// 	HistoryController hc = new HistoryController();
+	// 	assertEquals(hc.getHistoryOfEachMonth(),"hoge");
+	// }
+
 }

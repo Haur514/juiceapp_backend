@@ -19,6 +19,16 @@ public class HistoryService {
         return historyRepository.findAll();
     }
 
+    // public List<HistoryEntity> findAllJuiceHistory(){
+    //     return historyRepository.findAll()
+    //     .stream()
+    //     .filter((HistoryEntity historyEntity) -> {
+    //         if(historyEntity.get)
+    //         return true;
+    //     })
+    //     .collect(Collectors.toList(());
+    // }
+
     public List<HistoryEntity> findByName(String name){
         return historyRepository.findByName(name);
     }
