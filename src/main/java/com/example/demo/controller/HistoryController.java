@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +58,7 @@ public class HistoryController {
         List<HistoryEntity> historyList;
         Gson gson = new Gson();
         Map<String, Integer> sellingHistoryOfEachMonth = new HashMap<>();
+        initSellingHistoryOfEachMonth(sellingHistoryOfEachMonth);
 
         Calendar today = Calendar.getInstance();
         // historyList =
@@ -65,29 +67,9 @@ public class HistoryController {
                 .filter((HistoryEntity historyEntity) -> {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(historyEntity.getDate());
-                    // long diff = today.getTimeInMillis() - cal.getTimeInMillis();
-                    // Date diff_date = new Date(diff);
-                    // Calendar cal_diff = Calendar.getInstance();
-                    // cal_diff.setTime(diff_date);
-                    // return cal_diff.get(Calendar.YEAR) < 1;
-                    return isHowMonthDiffer(cal);
+                    return isWithinHalfOfYear(cal);
                 })
-                // .filter((HistoryEntity historyEntity) -> {
-                // Calendar cal = Calendar.getInstance();
-                // cal.setTime(historyEntity.getDate());
-                // return (today.get(Calendar.MONTH) - cal.get(Calendar.MONTH)) < 6;
-                // })
                 .collect(Collectors.toList());
-        // .forEach((HistoryEntity historyEntity) -> {
-        // Calendar cal = Calendar.getInstance();
-        // cal.setTime(historyEntity.getDate());
-
-        // // YYYY/MM形式で日付を取得
-        // String dateYYYYMM = convertDateToYYYYMM(cal);
-        // sellingHistoryOfEachMonth.put(dateYYYYMM,
-        // sellingHistoryOfEachMonth.getOrDefault(dateYYYYMM, 0) +
-        // historyEntity.getPrice());
-        // });
         historyList.stream().forEach((historyEntity) -> {
             Calendar cal = Calendar.getInstance();
             cal.setTime(historyEntity.getDate());
@@ -100,7 +82,55 @@ public class HistoryController {
         return gson.toJson(sellingHistoryOfEachMonth);
     }
 
-    private boolean isHowMonthDiffer(Calendar cal) {
+    // @RequestMapping("/history/juice/eachmonth")
+    // public String getJuiceHistoryOfEachMonth() {
+    //     List<HistoryEntity> historyList;
+    //     Gson gson = new Gson();
+    //     Map<String, Integer> sellingHistoryOfEachMonth = new HashMap<>();
+    //     initSellingHistoryOfEachMonth(sellingHistoryOfEachMonth);
+
+    //     Calendar today = Calendar.getInstance();
+    //     // historyList =
+    //     historyList = historyService.findAllHistory()
+    //             .stream()
+    //             .filter((HistoryEntity historyEntity) -> {
+    //                 Calendar cal = Calendar.getInstance();
+    //                 cal.setTime(historyEntity.getDate());
+    //                 return isWithinHalfOfYear(cal);
+    //             })
+    //             .collect(Collectors.toList());
+    //     historyList.stream().forEach((historyEntity) -> {
+    //         Calendar cal = Calendar.getInstance();
+    //         cal.setTime(historyEntity.getDate());
+
+    //         // YYYY/MM形式で日付を取得
+    //         String dateYYYYMM = convertDateToYYYYMM(cal);
+    //         sellingHistoryOfEachMonth.put(dateYYYYMM,
+    //                 sellingHistoryOfEachMonth.getOrDefault(dateYYYYMM, 0) + historyEntity.getPrice());
+    //     });
+    //     return gson.toJson(sellingHistoryOfEachMonth);
+    // }
+
+    // sellingHistoryOfEachMonthを初期化する
+    private void initSellingHistoryOfEachMonth(Map<String,Integer> sellingHistoryOfEachMonth){
+        for(String YYYYMM : getMonthWithinHalfYearAsStringYYYYMM()){
+            sellingHistoryOfEachMonth.put(YYYYMM,0);
+        }
+    }
+
+    // 現在の時刻から半年以内の月をYYYY/MMの形で6つ列挙する
+    private List<String> getMonthWithinHalfYearAsStringYYYYMM(){
+        List<String> ret = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        for(int i = 0; i < 6;i++){
+            ret.add(convertDateToYYYYMM(cal));
+            cal.add(Calendar.MONTH,-1);
+        }
+        return ret;
+    }
+
+    // ある日付が現在から半年以内かを判定する
+    private boolean isWithinHalfOfYear(Calendar cal) {
         Calendar today = Calendar.getInstance();
         if (today.get(Calendar.YEAR) == cal.get(Calendar.YEAR)) {
             if (today.get(Calendar.MONTH) - cal.get(Calendar.MONTH) < 6) {
