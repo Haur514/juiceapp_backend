@@ -33,4 +33,6 @@ public class HistoryEntity {
 
     @Column(name ="date")
     private Date date;
+
+
 }

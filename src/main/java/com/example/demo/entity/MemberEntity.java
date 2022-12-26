@@ -24,4 +24,7 @@ public class MemberEntity {
 
     @Column(name="attribute")
     private String attribute;
+
+    @Column(name="active")
+    private boolean active;
 }
