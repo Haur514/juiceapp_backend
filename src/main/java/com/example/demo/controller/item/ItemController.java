@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.item;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.entity.ItemEntity;
+import com.example.demo.repository.ItemRepository;
 import com.example.demo.service.ItemService;
 
 
@@ -16,6 +18,10 @@ public class ItemController {
     @Autowired
     ItemService itemService;
 
+    @Autowired
+    ItemRepository itemRepository;
+
+    
     @RequestMapping("/item")
     public String getItemList(
        @RequestParam(name="grouping",defaultValue="") String grouping
@@ -62,6 +68,18 @@ public class ItemController {
     public String getItemRanking(){
         return itemService.getItemRanking();
     }
+
+    @PostMapping
+    @RequestMapping("/item/setactivity")
+     public String setMemberActivity(
+        @RequestParam(name="id") String name,
+        @RequestParam(name="activity") boolean activity){
+        ItemEntity itemEntity= itemService.findByName(name);
+        itemEntity.setActive(activity);
+        itemRepository.save(itemEntity);
+        return "success";
+     }
+
     
 
 }

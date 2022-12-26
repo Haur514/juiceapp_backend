@@ -90,6 +90,10 @@ public class ItemService {
         return "success";
     }
 
+    public ItemEntity findByName(String name){
+        return itemRepository.findByName(name);
+    }
+
     public String deleteItem(String name){
         try{
             itemRepository.deleteByName(name);

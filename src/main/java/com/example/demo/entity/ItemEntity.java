@@ -27,4 +27,7 @@ public class ItemEntity {
     
     @Column(name = "salesfigure")
     private int salesFigure;
+
+    @Column(name = "active")
+    private boolean active;
 }
