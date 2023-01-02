@@ -129,6 +129,13 @@ public class HistoryController {
         return ret;
     }
 
+    // historyEntityに記録されたDateが現在から半年以内か判定する
+    private boolean isTheHistoryRegisteredWithinHalfYear(HistoryEntity historyEntity){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(historyEntity.getDate());
+        return isWithinHalfOfYear(cal);
+    }
+
     // ある日付が現在から半年以内かを判定する
     private boolean isWithinHalfOfYear(Calendar cal) {
         Calendar today = Calendar.getInstance();
@@ -152,6 +159,33 @@ public class HistoryController {
         String formatYearStr = String.format("%04d", year);
         String formatMonthStr = String.format("%02d", month+1);
         return formatYearStr + "/" + formatMonthStr;
+    }
+
+
+    // 過去最大6ヶ月分の料金を各月ごとに返す
+    @RequestMapping("/history/billingamount")
+    public String getMemberBillingAmount(
+    @RequestParam(name="name") String name
+    ){
+
+    Map<String,Integer> billingAmountForEachMonth = new HashMap<>();
+    initSellingHistoryOfEachMonth(billingAmountForEachMonth);
+
+    List<HistoryEntity> historyEntities = historyService.findByName(name);
+
+    historyEntities.stream()
+    .filter((historyEntity) -> {
+        return isTheHistoryRegisteredWithinHalfYear(historyEntity);
+    })
+    .forEach((historyEntity) -> {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(historyEntity.getDate());
+
+        // YYYY/MM形式で日付を取得
+        String dateYYYYMM = convertDateToYYYYMM(cal);
+        billingAmountForEachMonth.put(dateYYYYMM,billingAmountForEachMonth.getOrDefault(dateYYYYMM, 0) + historyEntity.getPrice());
+    });
+    return new Gson().toJson(billingAmountForEachMonth);
     }
 
 }

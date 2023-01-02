@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.MemberEntity;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.service.HistoryService;
 import com.example.demo.service.MemberService;
 
 @RestController
@@ -20,6 +21,9 @@ public class MemberController {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    HistoryService historyService;
 
     @PostMapping
     @RequestMapping("/member/add")
