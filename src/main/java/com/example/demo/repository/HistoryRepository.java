@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,4 +31,21 @@ public interface HistoryRepository extends JpaRepository<HistoryEntity, Integer>
     """,
         nativeQuery = true)
     public List<HistoryEntity> findByName(String name);
+
+    @Query(value="""
+            SELECT
+                SUM(price)
+            FROM
+                history
+            WHERE
+                date
+            BETWEEN
+                    ?2
+                AND
+                    ?3
+            AND
+                name = ?1
+            ;
+            """,nativeQuery = true)
+    public Integer getBillingAmountAllMember(String userId,Date date1, Date date2);
 }
