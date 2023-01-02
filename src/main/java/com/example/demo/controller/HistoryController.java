@@ -193,11 +193,13 @@ public class HistoryController {
     // 年，月を指定することで，構成員全員の使用した金額を出力する．
     @RequestMapping("/history/billingamount/allmember")
     public String getBillingAmountAllMember(){
-        Map<Date,Map<String,Integer>> ret = new HashMap<>();
+        Map<String,Map<String,Integer>> ret = new HashMap<>();
         for(Date date: new ManipulateDate().getLastSixMonth()){
             Map<String,Integer> billingAmountOfAMonth = new HashMap<>();
             billingAmountOfAMonth = historyService.getBillingAmountOfAMonth(date);
-            ret.put(date,billingAmountOfAMonth);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            ret.put(convertDateToYYYYMM(cal),billingAmountOfAMonth);
         }
         return new Gson().toJson(ret);
     }
