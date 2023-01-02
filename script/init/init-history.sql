@@ -3,7 +3,7 @@ CREATE TABLE history (
     name varchar(20),
     item varchar(20),
     price integer,
-    date varchar(50)
+    timestamp with time zone
 );
 
 SELECT * FROM history;
