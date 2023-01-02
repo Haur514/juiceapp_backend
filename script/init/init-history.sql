@@ -3,7 +3,9 @@ CREATE TABLE history (
     name varchar(20),
     item varchar(20),
     price integer,
-    timestamp with time zone
+    date timestamp with time zone default (now() at time zone 'jp')
 );
+
+SET SESSION timezone TO 'Asia/Tokyo';
 
 SELECT * FROM history;

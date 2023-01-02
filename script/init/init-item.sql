@@ -3,7 +3,8 @@ CREATE TABLE item (
     sellingprice integer,
     costprice integer,
     grouping varchar(20),
-    salesfigure integer
+    salesfigure integer,
+    active boolean
 );
 
 SELECT * FROM item;
