@@ -3,5 +3,5 @@ CREATE TABLE member(
     displayname varchar(20),
     unpayedamount integer,
     attribute varchar(20),
-    active boolean
+    active boolean default true
 )

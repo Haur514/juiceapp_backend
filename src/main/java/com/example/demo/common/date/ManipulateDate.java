@@ -69,4 +69,13 @@ public class ManipulateDate {
 
         return ret;
     }
+
+
+    public static String convertDateToYYYYMM(Calendar cal) {
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        String formatYearStr = String.format("%04d", year);
+        String formatMonthStr = String.format("%02d", month + 1);
+        return formatYearStr + "/" + formatMonthStr;
+    }
 }

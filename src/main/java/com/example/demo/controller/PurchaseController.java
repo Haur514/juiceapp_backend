@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,9 +12,11 @@ import com.example.demo.entity.ItemEntity;
 import com.example.demo.entity.MemberEntity;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.repository.SalesRepository;
 import com.example.demo.service.HistoryService;
 import com.example.demo.service.ItemService;
 import com.example.demo.service.MemberService;
+import com.example.demo.service.SalesService;
 
 @RestController
 @EnableAutoConfiguration
@@ -23,6 +27,9 @@ public class PurchaseController {
 
     @Autowired ItemRepository itemRepository;
     @Autowired MemberRepository memberRepository;
+
+    @Autowired SalesRepository salesRepository;
+    @Autowired SalesService salesService;
 
 
     @RequestMapping("/purchase")
@@ -47,6 +54,10 @@ public class PurchaseController {
         historyService.insertHistory(name,item,price);
         itemService.purchased(item);
         memberService.purchased(name,price);
+
+        // salesDBの更新
+        salesService.updateSales(name, new Date(), price);
+        
         return "success";
     }
 
