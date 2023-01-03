@@ -2,11 +2,12 @@ package com.example.demo.controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -42,7 +43,11 @@ public class HistoryController {
     public String cancelHistory(@RequestParam("name") String name, @RequestParam("id") String id) {
         return historyService.removeHistory(Integer.parseInt(id), name);
     }
-
+    
+    public String test(){
+        return "hoge";
+    }
+    
     @RequestMapping("/history")
     public String getHistory(@RequestParam(name = "name", defaultValue = "") String name) {
         List<HistoryEntity> historyList;
@@ -59,60 +64,30 @@ public class HistoryController {
     public String getHistoryOfEachMonth() {
         List<HistoryEntity> historyList;
         Gson gson = new Gson();
-        Map<String, Integer> sellingHistoryOfEachMonth = new HashMap<>();
+        Map<String, Integer> sellingHistoryOfEachMonth = new LinkedHashMap<>();
         initSellingHistoryOfEachMonth(sellingHistoryOfEachMonth);
 
         Calendar today = Calendar.getInstance();
         // historyList =
-        historyList = historyService.findAllHistory()
+        historyService.findAllHistory()
                 .stream()
                 .filter((HistoryEntity historyEntity) -> {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(historyEntity.getDate());
                     return isWithinHalfOfYear(cal);
                 })
-                .collect(Collectors.toList());
-        historyList.stream().forEach((historyEntity) -> {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(historyEntity.getDate());
+                .forEach((historyEntity) -> {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(historyEntity.getDate());
 
-            // YYYY/MM形式で日付を取得
-            String dateYYYYMM = convertDateToYYYYMM(cal);
-            sellingHistoryOfEachMonth.put(dateYYYYMM,
-                    sellingHistoryOfEachMonth.getOrDefault(dateYYYYMM, 0) + historyEntity.getPrice());
-        });
+                    // YYYY/MM形式で日付を取得
+                    String dateYYYYMM = convertDateToYYYYMM(cal);
+                    sellingHistoryOfEachMonth.put(dateYYYYMM,
+                            sellingHistoryOfEachMonth.getOrDefault(dateYYYYMM, 0) + historyEntity.getPrice());
+                });
+
         return gson.toJson(sellingHistoryOfEachMonth);
     }
-
-    // @RequestMapping("/history/juice/eachmonth")
-    // public String getJuiceHistoryOfEachMonth() {
-    // List<HistoryEntity> historyList;
-    // Gson gson = new Gson();
-    // Map<String, Integer> sellingHistoryOfEachMonth = new HashMap<>();
-    // initSellingHistoryOfEachMonth(sellingHistoryOfEachMonth);
-
-    // Calendar today = Calendar.getInstance();
-    // // historyList =
-    // historyList = historyService.findAllHistory()
-    // .stream()
-    // .filter((HistoryEntity historyEntity) -> {
-    // Calendar cal = Calendar.getInstance();
-    // cal.setTime(historyEntity.getDate());
-    // return isWithinHalfOfYear(cal);
-    // })
-    // .collect(Collectors.toList());
-    // historyList.stream().forEach((historyEntity) -> {
-    // Calendar cal = Calendar.getInstance();
-    // cal.setTime(historyEntity.getDate());
-
-    // // YYYY/MM形式で日付を取得
-    // String dateYYYYMM = convertDateToYYYYMM(cal);
-    // sellingHistoryOfEachMonth.put(dateYYYYMM,
-    // sellingHistoryOfEachMonth.getOrDefault(dateYYYYMM, 0) +
-    // historyEntity.getPrice());
-    // });
-    // return gson.toJson(sellingHistoryOfEachMonth);
-    // }
 
     // sellingHistoryOfEachMonthを初期化する
     private void initSellingHistoryOfEachMonth(Map<String, Integer> sellingHistoryOfEachMonth) {
@@ -129,6 +104,8 @@ public class HistoryController {
             ret.add(convertDateToYYYYMM(cal));
             cal.add(Calendar.MONTH, -1);
         }
+        
+        Collections.reverse(ret);
         return ret;
     }
 
@@ -144,8 +121,6 @@ public class HistoryController {
         Calendar today = Calendar.getInstance();
         if (today.get(Calendar.YEAR) == cal.get(Calendar.YEAR)) {
             if (today.get(Calendar.MONTH) - cal.get(Calendar.MONTH) < 6) {
-            }
-            {
                 return true;
             }
         } else if (today.get(Calendar.YEAR) - cal.get(Calendar.YEAR) == 1) {
@@ -192,14 +167,14 @@ public class HistoryController {
 
     // 年，月を指定することで，構成員全員の使用した金額を出力する．
     @RequestMapping("/history/billingamount/allmember")
-    public String getBillingAmountAllMember(){
-        Map<String,Map<String,Integer>> ret = new HashMap<>();
-        for(Date date: new ManipulateDate().getLastSixMonth()){
-            Map<String,Integer> billingAmountOfAMonth = new HashMap<>();
+    public String getBillingAmountAllMember() {
+        Map<String, Map<String, Integer>> ret = new HashMap<>();
+        for (Date date : new ManipulateDate().getLastSixMonth()) {
+            Map<String, Integer> billingAmountOfAMonth = new HashMap<>();
             billingAmountOfAMonth = historyService.getBillingAmountOfAMonth(date);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
-            ret.put(convertDateToYYYYMM(cal),billingAmountOfAMonth);
+            ret.put(convertDateToYYYYMM(cal), billingAmountOfAMonth);
         }
         return new Gson().toJson(ret);
     }

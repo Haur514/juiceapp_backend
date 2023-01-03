@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ManipulateDate {
-        // 現在の月から6ヶ月前までの月をリスト形式で返す関数
-        public List<Date> getLastSixMonth(){
+    // 現在の月から6ヶ月前までの月をリスト形式で返す関数
+    public List<Date> getLastSixMonth(){
             Date today = new Date();
     
             Calendar calendar = Calendar.getInstance();
