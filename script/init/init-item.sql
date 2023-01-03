@@ -4,7 +4,7 @@ CREATE TABLE item (
     costprice integer,
     grouping varchar(20),
     salesfigure integer,
-    active boolean
+    active boolean default true
 );
 
 SELECT * FROM item;
