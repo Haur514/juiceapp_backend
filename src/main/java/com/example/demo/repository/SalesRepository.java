@@ -19,6 +19,4 @@ public interface SalesRepository extends JpaRepository<SalesEntity, Integer>{
             ;
             """,nativeQuery = true)
     public SalesEntity findByUserIdAndDate(String userId,String date);
-
-    // public List<SalesEntity> findAll();
 }

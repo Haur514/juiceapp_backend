@@ -33,13 +33,6 @@ public class SalesService {
             salesEntity.setSales(salesEntity.getSales()+price);
         }
         salesRepository.save(salesEntity);
-
-        // SalesEntity salesEntity = new SalesEntity();
-        // salesEntity.setDate(YYYYMM);
-        // salesEntity.setUserId(name);
-        // salesEntity.setSales(price);
-        // salesRepository.save(salesEntity);
-
         
         return "success";
     }
