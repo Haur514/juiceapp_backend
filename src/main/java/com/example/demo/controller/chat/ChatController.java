@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.chat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -28,10 +28,10 @@ public class ChatController {
 
     @PostMapping
     @RequestMapping("/chat/delete")
-    public String cancelHistory(@RequestParam("name") String name,@RequestParam("id") String id){
-        return "hoge";
-        // return chatService.removeHistory(Integer.parseInt(id), name);
+    public String cancelHistory(@RequestParam("id") String id){
+        return chatService.removeChat(Integer.parseInt(id));
     }
+
 
      @RequestMapping("/chat")
      public String getChat(){
