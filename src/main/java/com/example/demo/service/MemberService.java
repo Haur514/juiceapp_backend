@@ -124,14 +124,14 @@ public class MemberService {
     }
 
     // 商品が購入された時のmemberServiceの動作
-    public String purchased(String name,int price){
+    public boolean purchased(String name,int price){
         MemberEntity memberEntity = memberRepository.findByName(name);
         if(memberEntity==null){
-            return "failed";
+            return false;
         }
         memberEntity.setUmpayedAmount(memberEntity.getUmpayedAmount()+price);
         memberRepository.save(memberEntity);
-        return "success";
+        return true;
     }
 
     // 商品がキャンセルされた時のmemberServiceの動作

@@ -54,7 +54,6 @@ public class PurchaseController {
         historyService.insertHistory(name,item,price);
         itemService.purchased(item);
         memberService.purchased(name,price);
-
         // salesDBの更新
         salesService.updateSales(name, new Date(), price);
         
