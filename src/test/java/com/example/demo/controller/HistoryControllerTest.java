@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,16 +23,22 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.demo.util.TimeFactory;
 
-@SpringBootTest
+
 @AutoConfigureMockMvc
+@SpringBootTest
 public class HistoryControllerTest {
 
-    @Autowired private MockMvc mockMvc;
+    @Autowired 
+    private MockMvc mockMvc;
+
+    @Autowired
+    private HistoryController historyController;
 
     private final Date startDate = Date.from(Instant.parse("2022-01-03T00:00:00.00Z"));
     
     @MockBean
     private TimeFactory clock;
+
 
     @Test
 	public void testGetMonthWithinHalfYearAsStringYYYYMM() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
@@ -47,17 +56,9 @@ public class HistoryControllerTest {
 	}
 
 
-
-    // public static class MockCalendar {
-	// 	private static Calendar instance;
-		
-	// 	public static void setInstance(Calendar desired) {
-	// 		instance = (Calendar)desired.clone();
-	// 	}
-		
-	// 	@Mock
-	// 	public static Calendar getInstance() {
-	// 		return (Calendar)instance.clone();
-	// 	}
-	// }
+    @Test
+    void historyをリクエストすると200が帰る() throws Exception {
+        this.mockMvc.perform(get("/test")).andDo(print())
+            .andExpect(status().isOk());
+    }
 }

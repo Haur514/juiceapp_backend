@@ -179,4 +179,9 @@ public class HistoryController {
         return new Gson().toJson(ret);
     }
 
+
+    @RequestMapping("/test")
+    public String testFunc(){
+        return "test";
+    }
 }

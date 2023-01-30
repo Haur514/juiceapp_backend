@@ -144,5 +144,4 @@ public class MemberService {
         memberRepository.save(memberEntity);
         return true;
     }
-
 }
