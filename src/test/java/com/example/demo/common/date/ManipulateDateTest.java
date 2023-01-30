@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,5 +53,25 @@ public class ManipulateDateTest {
         String actual = ManipulateDate.convertDateToYYYYMM(cal);
 
         assertEquals(actual,expected);
+    }
+
+
+
+    @Test
+    public void testGetFirstDate(){
+        Calendar expected = Calendar.getInstance();
+        expected.set(Calendar.YEAR,2023);
+        expected.set(Calendar.MONTH,0);
+        int first = expected.getActualMinimum(Calendar.DATE);
+        expected.set(Calendar.DATE,first);
+        expected.set(Calendar.HOUR_OF_DAY, 00);
+        expected.set(Calendar.MINUTE, 00);
+        expected.set(Calendar.SECOND, 00);
+        expected.set(Calendar.MILLISECOND, 000);
+        Date expectedDate = expected.getTime();
+
+        Date actual = ManipulateDate.getFirstDate(cal.getTime());
+
+        assertEquals(expectedDate,actual);
     }
 }
