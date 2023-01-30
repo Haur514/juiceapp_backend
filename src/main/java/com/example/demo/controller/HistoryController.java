@@ -72,7 +72,7 @@ public class HistoryController {
             .filter((HistoryEntity historyEntity) -> {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(historyEntity.getDate());
-                return isWithinHalfOfYear(cal);
+                return ManipulateDate.isWithinHalfOfYear(cal,Calendar.getInstance());
             })
             .forEach((historyEntity) -> {
                 Calendar cal = Calendar.getInstance();
@@ -100,22 +100,7 @@ public class HistoryController {
     private boolean isTheHistoryRegisteredWithinHalfYear(HistoryEntity historyEntity) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(historyEntity.getDate());
-        return isWithinHalfOfYear(cal);
-    }
-
-    // ある日付が現在から半年以内かを判定する
-    private boolean isWithinHalfOfYear(Calendar cal) {
-        Calendar today = Calendar.getInstance();
-        if (today.get(Calendar.YEAR) == cal.get(Calendar.YEAR)) {
-            if (today.get(Calendar.MONTH) - cal.get(Calendar.MONTH) < 6) {
-                return true;
-            }
-        } else if (today.get(Calendar.YEAR) - cal.get(Calendar.YEAR) == 1) {
-            if (today.get(Calendar.MONTH) - 6 + 12 < cal.get(Calendar.MONTH)) {
-                return true;
-            }
-        }
-        return false;
+        return ManipulateDate.isWithinHalfOfYear(cal,Calendar.getInstance());
     }
 
     // 過去最大6ヶ月分の料金を各月ごとに返す

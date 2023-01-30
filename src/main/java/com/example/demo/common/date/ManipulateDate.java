@@ -85,11 +85,26 @@ public class ManipulateDate {
     }
 
 
+    // ある日付をYYYYMM形式の文字列で返す
     public static String convertDateToYYYYMM(Calendar cal) {
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         String formatYearStr = String.format("%04d", year);
         String formatMonthStr = String.format("%02d", month + 1);
         return formatYearStr + "/" + formatMonthStr;
+    }
+
+    // ある日付anotherdayが現在todayから半年以内かを判定する
+    public static boolean isWithinHalfOfYear(Calendar anotherday,Calendar today) {
+        if (today.get(Calendar.YEAR) == anotherday.get(Calendar.YEAR)) {
+            if (today.get(Calendar.MONTH) - anotherday.get(Calendar.MONTH) < 6) {
+                return true;
+            }
+        } else if (today.get(Calendar.YEAR) - anotherday.get(Calendar.YEAR) == 1) {
+            if (today.get(Calendar.MONTH) - 6 + 12 < anotherday.get(Calendar.MONTH)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
