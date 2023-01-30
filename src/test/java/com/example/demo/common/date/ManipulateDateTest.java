@@ -7,12 +7,24 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest
 public class ManipulateDateTest {
+
+    public Calendar cal = Calendar.getInstance();
+
+    // 下処理
+    @BeforeEach
+    public void preprocessTestClass(){
+        cal.set(Calendar.YEAR,2023);
+        cal.set(Calendar.MONTH,0);
+        cal.set(Calendar.DATE,1);
+    }
+
 
     @Test
 	public void testGetMonthWithinHalfYearAsStringYYYYMM() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
@@ -26,9 +38,19 @@ public class ManipulateDateTest {
         expected.add("2022/12");
         expected.add("2023/01");
 
-        List<String> actual = ManipulateDate.getMonthWithinHalfYearAsStringYYYYMM(Calendar.getInstance());
+        // 実行値
+        List<String> actual = ManipulateDate.getMonthWithinHalfYearAsStringYYYYMM(cal);
 
-        System.out.println(actual.toString());
         assertEquals(actual,expected);
 	}
+
+
+    @Test
+    public void testConvertDateToYYYYMM(){
+        String expected = "2023/01";
+
+        String actual = ManipulateDate.convertDateToYYYYMM(cal);
+
+        assertEquals(actual,expected);
+    }
 }

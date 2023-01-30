@@ -68,21 +68,21 @@ public class HistoryController {
         Calendar today = Calendar.getInstance();
         // historyList =
         historyService.findAllHistory()
-                .stream()
-                .filter((HistoryEntity historyEntity) -> {
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(historyEntity.getDate());
-                    return isWithinHalfOfYear(cal);
-                })
-                .forEach((historyEntity) -> {
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(historyEntity.getDate());
+            .stream()
+            .filter((HistoryEntity historyEntity) -> {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(historyEntity.getDate());
+                return isWithinHalfOfYear(cal);
+            })
+            .forEach((historyEntity) -> {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(historyEntity.getDate());
 
-                    // YYYY/MM形式で日付を取得
-                    String dateYYYYMM = ManipulateDate.convertDateToYYYYMM(cal);
-                    sellingHistoryOfEachMonth.put(dateYYYYMM,
-                            sellingHistoryOfEachMonth.getOrDefault(dateYYYYMM, 0) + historyEntity.getPrice());
-                });
+                // YYYY/MM形式で日付を取得
+                String dateYYYYMM = ManipulateDate.convertDateToYYYYMM(cal);
+                sellingHistoryOfEachMonth.put(dateYYYYMM,
+                        sellingHistoryOfEachMonth.getOrDefault(dateYYYYMM, 0) + historyEntity.getPrice());
+            });
 
         return gson.toJson(sellingHistoryOfEachMonth);
     }
@@ -129,18 +129,18 @@ public class HistoryController {
         List<HistoryEntity> historyEntities = historyService.findByName(name);
 
         historyEntities.stream()
-                .filter((historyEntity) -> {
-                    return isTheHistoryRegisteredWithinHalfYear(historyEntity);
-                })
-                .forEach((historyEntity) -> {
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(historyEntity.getDate());
+        .filter((historyEntity) -> {
+            return isTheHistoryRegisteredWithinHalfYear(historyEntity);
+        })
+        .forEach((historyEntity) -> {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(historyEntity.getDate());
 
-                    // YYYY/MM形式で日付を取得
-                    String dateYYYYMM = ManipulateDate.convertDateToYYYYMM(cal);
-                    billingAmountForEachMonth.put(dateYYYYMM,
-                            billingAmountForEachMonth.getOrDefault(dateYYYYMM, 0) + historyEntity.getPrice());
-                });
+            // YYYY/MM形式で日付を取得
+            String dateYYYYMM = ManipulateDate.convertDateToYYYYMM(cal);
+            billingAmountForEachMonth.put(dateYYYYMM,
+                    billingAmountForEachMonth.getOrDefault(dateYYYYMM, 0) + historyEntity.getPrice());
+        });
         return new Gson().toJson(billingAmountForEachMonth);
     }
 
