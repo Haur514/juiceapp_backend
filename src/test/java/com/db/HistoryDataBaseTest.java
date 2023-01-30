@@ -19,6 +19,8 @@ import com.github.springtestdbunit.annotation.DbUnitConfiguration;
       DbUnitTestExecutionListener.class
     })
 public class HistoryDataBaseTest {
+    // TODO
+    // データベースのmockがうまくいかない
     static IDatabaseTester databaseTester;
     static IDatabaseConnection connection;
 

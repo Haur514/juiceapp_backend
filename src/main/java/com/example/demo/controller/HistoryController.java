@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -81,7 +79,7 @@ public class HistoryController {
                     cal.setTime(historyEntity.getDate());
 
                     // YYYY/MM形式で日付を取得
-                    String dateYYYYMM = convertDateToYYYYMM(cal);
+                    String dateYYYYMM = ManipulateDate.convertDateToYYYYMM(cal);
                     sellingHistoryOfEachMonth.put(dateYYYYMM,
                             sellingHistoryOfEachMonth.getOrDefault(dateYYYYMM, 0) + historyEntity.getPrice());
                 });
@@ -91,23 +89,12 @@ public class HistoryController {
 
     // sellingHistoryOfEachMonthを初期化する
     private void initSellingHistoryOfEachMonth(Map<String, Integer> sellingHistoryOfEachMonth) {
-        for (String YYYYMM : getMonthWithinHalfYearAsStringYYYYMM()) {
+        for (String YYYYMM : ManipulateDate.getMonthWithinHalfYearAsStringYYYYMM(Calendar.getInstance())) {
             sellingHistoryOfEachMonth.put(YYYYMM, 0);
         }
     }
 
-    // 現在の時刻から半年以内の月をYYYY/MMの形で6つ列挙する
-    private List<String> getMonthWithinHalfYearAsStringYYYYMM() {
-        List<String> ret = new ArrayList<>();
-        Calendar cal = Calendar.getInstance();
-        for (int i = 0; i < 6; i++) {
-            ret.add(convertDateToYYYYMM(cal));
-            cal.add(Calendar.MONTH, -1);
-        }
-        
-        Collections.reverse(ret);
-        return ret;
-    }
+
 
     // historyEntityに記録されたDateが現在から半年以内か判定する
     private boolean isTheHistoryRegisteredWithinHalfYear(HistoryEntity historyEntity) {
@@ -131,14 +118,6 @@ public class HistoryController {
         return false;
     }
 
-    private String convertDateToYYYYMM(Calendar cal) {
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        String formatYearStr = String.format("%04d", year);
-        String formatMonthStr = String.format("%02d", month + 1);
-        return formatYearStr + "/" + formatMonthStr;
-    }
-
     // 過去最大6ヶ月分の料金を各月ごとに返す
     @RequestMapping("/history/billingamount")
     public String getMemberBillingAmount(
@@ -158,7 +137,7 @@ public class HistoryController {
                     cal.setTime(historyEntity.getDate());
 
                     // YYYY/MM形式で日付を取得
-                    String dateYYYYMM = convertDateToYYYYMM(cal);
+                    String dateYYYYMM = ManipulateDate.convertDateToYYYYMM(cal);
                     billingAmountForEachMonth.put(dateYYYYMM,
                             billingAmountForEachMonth.getOrDefault(dateYYYYMM, 0) + historyEntity.getPrice());
                 });
@@ -169,12 +148,12 @@ public class HistoryController {
     @RequestMapping("/history/billingamount/allmember")
     public String getBillingAmountAllMember() {
         Map<String, Map<String, Integer>> ret = new HashMap<>();
-        for (Date date : new ManipulateDate().getLastSixMonth()) {
+        for (Date date : ManipulateDate.getLastSixMonth(new Date())) {
             Map<String, Integer> billingAmountOfAMonth = new HashMap<>();
             billingAmountOfAMonth = historyService.getBillingAmountOfAMonth(date);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
-            ret.put(convertDateToYYYYMM(cal), billingAmountOfAMonth);
+            ret.put(ManipulateDate.convertDateToYYYYMM(cal), billingAmountOfAMonth);
         }
         return new Gson().toJson(ret);
     }

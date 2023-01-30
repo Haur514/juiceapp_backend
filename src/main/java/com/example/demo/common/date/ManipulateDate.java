@@ -2,6 +2,7 @@ package com.example.demo.common.date;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -9,8 +10,7 @@ import java.util.stream.Collectors;
 
 public class ManipulateDate {
     // 現在の月から6ヶ月前までの月をリスト形式で返す関数
-    public List<Date> getLastSixMonth(){
-            Date today = new Date();
+    public static List<Date> getLastSixMonth(Date today){
     
             Calendar calendar = Calendar.getInstance();
             List<Date> ret = new ArrayList<>();
@@ -26,8 +26,22 @@ public class ManipulateDate {
             return ret;
         }
 
-        // 引数に与えられた月の翌月の月初日を返す
-    public Date getNextFirstDate(Date date){
+
+
+    // 現在の時刻から半年以内の月をYYYY/MMの形で6つ列挙する
+    public static  List<String> getMonthWithinHalfYearAsStringYYYYMM(Calendar cal) {
+        List<String> ret = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            ret.add(ManipulateDate.convertDateToYYYYMM(cal));
+            cal.add(Calendar.MONTH, -1);
+        }
+        Collections.reverse(ret);
+        return ret;
+    }
+
+    
+    // 引数に与えられた月の翌月の月初日を返す
+    public static Date getNextFirstDate(Date date){
         if (date == null){
             return null;
         }
@@ -49,7 +63,7 @@ public class ManipulateDate {
     }
 
     // 月初日を返す
-    public Date getFirstDate(Date date) {
+    public static Date getFirstDate(Date date) {
 
         if (date == null)
             return null;
