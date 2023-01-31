@@ -17,6 +17,26 @@ public class HistoryList {
         return Collections.unmodifiableList(this.historyList);
     }
 
+    // 年，月を指定すると，その月のHistoryListを返す．
+    public HistoryList getHistoryListOfSpecifiedMonth(int year,int month){
+        return (
+            new HistoryList(
+                this.historyList
+                .stream()
+                .filter((HistoryEntity historyEntity) -> {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(historyEntity.getDate());
+                    
+                    Calendar selectedCal = Calendar.getInstance();
+                    selectedCal.set(Calendar.YEAR,year-1);
+                    selectedCal.set(Calendar.MONTH,month-1);
+
+                    return ManipulateDate.isSameMonth(cal, selectedCal);
+                })
+                .toList()
+            )
+        );
+    }
     
     // 半年以内のリストを取得
     public HistoryList getHistoryListWithinHalfYear(){

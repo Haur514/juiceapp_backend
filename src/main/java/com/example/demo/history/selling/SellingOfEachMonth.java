@@ -1,6 +1,7 @@
 package com.example.demo.history.selling;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -11,6 +12,8 @@ import com.google.gson.Gson;
 
 public class SellingOfEachMonth {
     LinkedHashMap<String, Integer> sellingAmountOfEachMonth = new LinkedHashMap<>();
+
+    Map<String,Integer> sellingOfMonthPerPerson = new HashMap<>();
 
     public SellingOfEachMonth(HistoryList historyList){
         setSellingAmountOfEachMonth(historyList);

@@ -10,26 +10,33 @@ import java.util.stream.Collectors;
 
 public class ManipulateDate {
     // 現在の月から6ヶ月前までの月をリスト形式で返す関数
-    public static List<Date> getLastSixMonth(Date today){
-    
-            Calendar calendar = Calendar.getInstance();
-            List<Date> ret = new ArrayList<>();
-    
-            for(int i = 0; i < 6;i++){
-                ret.add(getFirstDate(calendar.getTime()));
-                calendar.add(Calendar.MONTH,-1);
-            }
-    
-            ret = ret.stream()
-            .sorted(Comparator.comparing(Date::getTime))
-            .collect(Collectors.toList());
-            return ret;
+    public static List<Date> getLastSixMonth(Date today) {
+
+        Calendar calendar = Calendar.getInstance();
+        List<Date> ret = new ArrayList<>();
+
+        for (int i = 0; i < 6; i++) {
+            ret.add(getFirstDate(calendar.getTime()));
+            calendar.add(Calendar.MONTH, -1);
         }
 
+        ret = ret.stream()
+                .sorted(Comparator.comparing(Date::getTime))
+                .collect(Collectors.toList());
+        return ret;
+    }
 
+    // 二つのCalendarが同じ年の同じ月かどうか判定する
+    public static boolean isSameMonth(Calendar cal1, Calendar cal2) {
+        if(cal1.get(Calendar.YEAR)==cal2.get(Calendar.YEAR)
+        && cal1.get(Calendar.MONTH)==cal2.get(Calendar.MONTH)){
+            return true;
+        }
+        return false;
+    }
 
     // 現在の時刻から半年以内の月をYYYY/MMの形で6つ列挙する
-    public static  List<String> getMonthWithinHalfYearAsStringYYYYMM(Calendar cal) {
+    public static List<String> getMonthWithinHalfYearAsStringYYYYMM(Calendar cal) {
         List<String> ret = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             ret.add(ManipulateDate.convertDateToYYYYMM(cal));
@@ -39,15 +46,14 @@ public class ManipulateDate {
         return ret;
     }
 
-    
     // 引数に与えられた月の翌月の月初日を返す
-    public static Date getNextFirstDate(Date date){
-        if (date == null){
+    public static Date getNextFirstDate(Date date) {
+        if (date == null) {
             return null;
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.add(Calendar.MONTH,1);
+        calendar.add(Calendar.MONTH, 1);
         int first = calendar.getActualMinimum(Calendar.DATE);
         calendar.set(Calendar.DATE, first);
 
@@ -84,7 +90,6 @@ public class ManipulateDate {
         return ret;
     }
 
-
     // ある日付をYYYYMM形式の文字列で返す
     public static String convertDateToYYYYMM(Calendar cal) {
         int year = cal.get(Calendar.YEAR);
@@ -95,7 +100,7 @@ public class ManipulateDate {
     }
 
     // ある日付anotherdayが現在todayから半年以内かを判定する
-    public static boolean isWithinHalfOfYear(Calendar anotherday,Calendar today) {
+    public static boolean isWithinHalfOfYear(Calendar anotherday, Calendar today) {
         if (today.get(Calendar.YEAR) == anotherday.get(Calendar.YEAR)) {
             if (today.get(Calendar.MONTH) - anotherday.get(Calendar.MONTH) < 6) {
                 return true;

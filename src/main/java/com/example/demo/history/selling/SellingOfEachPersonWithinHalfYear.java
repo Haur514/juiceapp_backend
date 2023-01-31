@@ -18,7 +18,8 @@ public class SellingOfEachPersonWithinHalfYear {
 
     public SellingOfEachPersonWithinHalfYear(HistoryList historyList,String memberName){
         this.historyList = historyList;
-        this.memberName = memberName;        setSellingOfEachPersonWithinHalfYear();
+        this.memberName = memberName;        
+        setSellingOfEachPersonWithinHalfYear();
     }
 
     

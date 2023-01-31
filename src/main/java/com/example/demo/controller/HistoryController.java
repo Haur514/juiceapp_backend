@@ -67,7 +67,6 @@ public class HistoryController {
     @RequestMapping("/history/billingamount")
     public String getMemberBillingAmount(
             @RequestParam(name = "name") String name) {
-
         // 半年以内におけるメンバーnameの購入金額を取得
         HistoryList historyList = new HistoryList(historyService.findAllHistory());
         SellingOfEachPersonWithinHalfYear sellingOfEachPersonWithinHalfYear = new SellingOfEachPersonWithinHalfYear(historyList,name);
