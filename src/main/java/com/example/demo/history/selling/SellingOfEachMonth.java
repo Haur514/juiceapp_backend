@@ -6,14 +6,14 @@ import java.util.Map;
 
 import com.example.demo.common.date.ManipulateDate;
 import com.example.demo.entity.HistoryEntity;
-import com.example.demo.service.HistoryService;
+import com.example.demo.history.HistoryList;
 import com.google.gson.Gson;
 
 public class SellingOfEachMonth {
     LinkedHashMap<String, Integer> sellingAmountOfEachMonth = new LinkedHashMap<>();
 
-    public SellingOfEachMonth(HistoryService historyService){
-        setSellingAmountOfEachMonth(historyService);
+    public SellingOfEachMonth(HistoryList historyList){
+        setSellingAmountOfEachMonth(historyList);
     }
 
 
@@ -22,22 +22,18 @@ public class SellingOfEachMonth {
     }
 
 
-
     // sellingAmountOfEachMonthに値を入れる
-    public void setSellingAmountOfEachMonth(HistoryService historyService){
+    public void setSellingAmountOfEachMonth(HistoryList historyList){
         initSellingAmountOfEachMonth(sellingAmountOfEachMonth);
 
-        historyService.findAllHistory()
+        HistoryList historyListWithinHalfYear = historyList.getHistoryListWithinHalfYear();
+
+        historyListWithinHalfYear
+        .getHistoryList()
         .stream()
-        .filter((HistoryEntity historyEntity) -> {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(historyEntity.getDate());
-            return ManipulateDate.isWithinHalfOfYear(cal,Calendar.getInstance());
-        })
         .forEach((HistoryEntity historyEntity) -> {
             Calendar cal = Calendar.getInstance();
             cal.setTime(historyEntity.getDate());
-
             // YYYY/MM形式で日付を取得
             String dateYYYYMM = ManipulateDate.convertDateToYYYYMM(cal);
             sellingAmountOfEachMonth.put(dateYYYYMM,
