@@ -20,6 +20,7 @@ public class SellingOfEachMonth {
     }
 
 
+    // 各月の売り上げをJson形式で返す
     public String getSellingAmountOfEachMonthAsJson(){
         return new Gson().toJson(sellingAmountOfEachMonth);
     }

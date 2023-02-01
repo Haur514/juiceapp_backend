@@ -18,7 +18,6 @@ public class MemberListTest {
     // 下処理
     @BeforeEach
     public void preprocess(){
-
         // テスト用データを作成しています．
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setName("h-yosiok");
@@ -48,5 +47,5 @@ public class MemberListTest {
         assertEquals(expected,actual);
     }
 
-
+    
 }

@@ -5,7 +5,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ManipulateDate {
@@ -111,5 +113,17 @@ public class ManipulateDate {
             }
         }
         return false;
+    }
+
+    /** "YYYY/MM"から，YYYYとMMをそれぞれ抽出し，int配列として返す．
+     *  int[0] : YYYY
+     *  int[1] : MMMM
+     */ 
+    public static Map<String,Integer> convertYYYYMMtoInteger(String YYYYMM){
+        String[] tmp = YYYYMM.split("/");
+        Map<String,Integer> ret = new HashMap<>();
+        ret.put("year",Integer.parseInt(tmp[0]));
+        ret.put("month",Integer.parseInt(tmp[1]));
+        return ret;
     }
 }

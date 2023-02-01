@@ -28,14 +28,19 @@ public class HistoryList {
                     cal.setTime(historyEntity.getDate());
                     
                     Calendar selectedCal = Calendar.getInstance();
-                    selectedCal.set(Calendar.YEAR,year-1);
+                    selectedCal.set(Calendar.YEAR,year);
                     selectedCal.set(Calendar.MONTH,month-1);
-
                     return ManipulateDate.isSameMonth(cal, selectedCal);
                 })
                 .toList()
             )
         );
+    }
+
+    // 年，月，顧客を指定すると，対象となるHistoryListを返す．
+    public HistoryList getHistoryListOfSpecifiedMonthAndPerson(int year,int month,String userId){
+        return this.getHistoryListOfSpecifiedMonth(year, month)
+        .getHistoryListOfMember(userId);
     }
     
     // 半年以内のリストを取得
@@ -74,5 +79,13 @@ public class HistoryList {
             getHistoryListOfMember(memberName)
             .getHistoryListWithinHalfYear()
         );
+    }
+
+    // リスト内の全顧客が利用した金額を返す
+    public int getAmountPrice(){
+        return this.historyList
+        .stream()
+        .mapToInt(i -> i.getPrice())
+        .sum();
     }
 }

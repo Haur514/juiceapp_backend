@@ -1,10 +1,6 @@
 package com.example.demo.controller;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,12 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.common.date.ManipulateDate;
 import com.example.demo.entity.HistoryEntity;
 import com.example.demo.history.HistoryList;
+import com.example.demo.history.selling.SellingOfAPersonWithinHalfYear;
+import com.example.demo.history.selling.SellingOfEachMemberInHalfYear;
 import com.example.demo.history.selling.SellingOfEachMonth;
-import com.example.demo.history.selling.SellingOfEachPersonWithinHalfYear;
+import com.example.demo.member.MemberList;
 import com.example.demo.service.HistoryService;
+import com.example.demo.service.MemberService;
 import com.google.gson.Gson;
 
 @RestController
@@ -27,6 +25,9 @@ public class HistoryController {
 
     @Autowired
     HistoryService historyService;
+
+    @Autowired
+    MemberService memberService;
 
     @PostMapping
     @RequestMapping("/history/add")
@@ -60,7 +61,7 @@ public class HistoryController {
     public String getHistoryOfEachMonth() {
         SellingOfEachMonth sellingOfEachMonth = new SellingOfEachMonth(
                 new HistoryList(historyService.findAllHistory()));
-        return sellingOfEachMonth.getSellingAmountOfEachMonthAsJson();
+    return sellingOfEachMonth.getSellingAmountOfEachMonthAsJson();
     }
 
     // 過去最大6ヶ月分の料金を各月ごとに返す
@@ -69,21 +70,26 @@ public class HistoryController {
             @RequestParam(name = "name") String name) {
         // 半年以内におけるメンバーnameの購入金額を取得
         HistoryList historyList = new HistoryList(historyService.findAllHistory());
-        SellingOfEachPersonWithinHalfYear sellingOfEachPersonWithinHalfYear = new SellingOfEachPersonWithinHalfYear(historyList,name);
+        SellingOfAPersonWithinHalfYear sellingOfEachPersonWithinHalfYear = new SellingOfAPersonWithinHalfYear(historyList,name);
         return sellingOfEachPersonWithinHalfYear.getSellingOfEachPersonWithinHalfYearAsJson();
     }
 
     // 年，月を指定することで，構成員全員の使用した金額を出力する．
     @RequestMapping("/history/billingamount/allmember")
     public String getBillingAmountAllMember() {
-        Map<String, Map<String, Integer>> ret = new HashMap<>();
-        for (Date date : ManipulateDate.getLastSixMonth(new Date())) {
-            Map<String, Integer> billingAmountOfAMonth = new HashMap<>();
-            billingAmountOfAMonth = historyService.getBillingAmountOfAMonth(date);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            ret.put(ManipulateDate.convertDateToYYYYMM(cal), billingAmountOfAMonth);
-        }
-        return new Gson().toJson(ret);
+        // Map<String, Map<String, Integer>> ret = new HashMap<>();
+        // for (Date date : ManipulateDate.getLastSixMonth(new Date())) {
+        //     Map<String, Integer> billingAmountOfAMonth = new HashMap<>();
+        //     billingAmountOfAMonth = historyService.getBillingAmountOfAMonth(date);
+        //     Calendar cal = Calendar.getInstance();
+        //     cal.setTime(date);
+        //     ret.put(ManipulateDate.convertDateToYYYYMM(cal), billingAmountOfAMonth);
+        // }
+        // return new Gson().toJson(ret);
+
+        HistoryList historyList = new HistoryList(historyService.findAllHistory());
+        MemberList memberList = new MemberList(memberService.findAll());
+        SellingOfEachMemberInHalfYear sellingOfEachMemberInHalfYear = new SellingOfEachMemberInHalfYear(historyList,memberList);
+        return sellingOfEachMemberInHalfYear.getAsJson();
     }
 }
