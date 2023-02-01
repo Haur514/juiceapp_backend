@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.common.date.ManipulateDate;
 import com.example.demo.entity.HistoryEntity;
+import com.example.demo.history.HistoryList;
+import com.example.demo.history.selling.SellingOfEachMonth;
+import com.example.demo.history.selling.SellingOfEachPersonWithinHalfYear;
 import com.example.demo.service.HistoryService;
 import com.google.gson.Gson;
 
@@ -41,11 +43,7 @@ public class HistoryController {
     public String cancelHistory(@RequestParam("name") String name, @RequestParam("id") String id) {
         return historyService.removeHistory(Integer.parseInt(id), name);
     }
-    
-    public String test(){
-        return "hoge";
-    }
-    
+
     @RequestMapping("/history")
     public String getHistory(@RequestParam(name = "name", defaultValue = "") String name) {
         List<HistoryEntity> historyList;
@@ -60,88 +58,19 @@ public class HistoryController {
 
     @RequestMapping("/history/eachmonth")
     public String getHistoryOfEachMonth() {
-        List<HistoryEntity> historyList;
-        Gson gson = new Gson();
-        Map<String, Integer> sellingHistoryOfEachMonth = new LinkedHashMap<>();
-        initSellingHistoryOfEachMonth(sellingHistoryOfEachMonth);
-
-        Calendar today = Calendar.getInstance();
-        // historyList =
-        historyService.findAllHistory()
-            .stream()
-            .filter((HistoryEntity historyEntity) -> {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(historyEntity.getDate());
-                return isWithinHalfOfYear(cal);
-            })
-            .forEach((historyEntity) -> {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(historyEntity.getDate());
-
-                // YYYY/MM形式で日付を取得
-                String dateYYYYMM = ManipulateDate.convertDateToYYYYMM(cal);
-                sellingHistoryOfEachMonth.put(dateYYYYMM,
-                        sellingHistoryOfEachMonth.getOrDefault(dateYYYYMM, 0) + historyEntity.getPrice());
-            });
-
-        return gson.toJson(sellingHistoryOfEachMonth);
-    }
-
-    // sellingHistoryOfEachMonthを初期化する
-    private void initSellingHistoryOfEachMonth(Map<String, Integer> sellingHistoryOfEachMonth) {
-        for (String YYYYMM : ManipulateDate.getMonthWithinHalfYearAsStringYYYYMM(Calendar.getInstance())) {
-            sellingHistoryOfEachMonth.put(YYYYMM, 0);
-        }
-    }
-
-
-
-    // historyEntityに記録されたDateが現在から半年以内か判定する
-    private boolean isTheHistoryRegisteredWithinHalfYear(HistoryEntity historyEntity) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(historyEntity.getDate());
-        return isWithinHalfOfYear(cal);
-    }
-
-    // ある日付が現在から半年以内かを判定する
-    private boolean isWithinHalfOfYear(Calendar cal) {
-        Calendar today = Calendar.getInstance();
-        if (today.get(Calendar.YEAR) == cal.get(Calendar.YEAR)) {
-            if (today.get(Calendar.MONTH) - cal.get(Calendar.MONTH) < 6) {
-                return true;
-            }
-        } else if (today.get(Calendar.YEAR) - cal.get(Calendar.YEAR) == 1) {
-            if (today.get(Calendar.MONTH) - 6 + 12 < cal.get(Calendar.MONTH)) {
-                return true;
-            }
-        }
-        return false;
+        SellingOfEachMonth sellingOfEachMonth = new SellingOfEachMonth(
+                new HistoryList(historyService.findAllHistory()));
+        return sellingOfEachMonth.getSellingAmountOfEachMonthAsJson();
     }
 
     // 過去最大6ヶ月分の料金を各月ごとに返す
     @RequestMapping("/history/billingamount")
     public String getMemberBillingAmount(
             @RequestParam(name = "name") String name) {
-
-        Map<String, Integer> billingAmountForEachMonth = new HashMap<>();
-        initSellingHistoryOfEachMonth(billingAmountForEachMonth);
-
-        List<HistoryEntity> historyEntities = historyService.findByName(name);
-
-        historyEntities.stream()
-        .filter((historyEntity) -> {
-            return isTheHistoryRegisteredWithinHalfYear(historyEntity);
-        })
-        .forEach((historyEntity) -> {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(historyEntity.getDate());
-
-            // YYYY/MM形式で日付を取得
-            String dateYYYYMM = ManipulateDate.convertDateToYYYYMM(cal);
-            billingAmountForEachMonth.put(dateYYYYMM,
-                    billingAmountForEachMonth.getOrDefault(dateYYYYMM, 0) + historyEntity.getPrice());
-        });
-        return new Gson().toJson(billingAmountForEachMonth);
+        // 半年以内におけるメンバーnameの購入金額を取得
+        HistoryList historyList = new HistoryList(historyService.findAllHistory());
+        SellingOfEachPersonWithinHalfYear sellingOfEachPersonWithinHalfYear = new SellingOfEachPersonWithinHalfYear(historyList,name);
+        return sellingOfEachPersonWithinHalfYear.getSellingOfEachPersonWithinHalfYearAsJson();
     }
 
     // 年，月を指定することで，構成員全員の使用した金額を出力する．
@@ -156,11 +85,5 @@ public class HistoryController {
             ret.put(ManipulateDate.convertDateToYYYYMM(cal), billingAmountOfAMonth);
         }
         return new Gson().toJson(ret);
-    }
-
-
-    @RequestMapping("/test")
-    public String testFunc(){
-        return "test";
     }
 }
