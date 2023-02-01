@@ -19,7 +19,8 @@ public class MemberService {
     @Autowired
     MemberRepository memberRepository;
 
-    public List<MemberEntity> getAllMembers(){
+
+    public List<MemberEntity> findAll(){
         return memberRepository.findAll();
     }
 
