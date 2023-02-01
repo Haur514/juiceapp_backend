@@ -11,4 +11,15 @@ public class MemberList {
     MemberList(List<MemberEntity> memberList){
         this.memberList = memberList;
     }
+
+
+    public List<String> getMemberNameList(){
+        List<String> memberNameList = new ArrayList<>();
+        this.memberList
+        .stream()
+        .forEach((MemberEntity memberEntity) -> {
+            memberNameList.add(memberEntity.getName());
+        });
+        return memberNameList;
+    }
 }
