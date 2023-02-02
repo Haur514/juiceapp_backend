@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.controller.member.requestbody.MemberAddRequestBody;
+import com.example.demo.controller.member.requestbody.MemberDeleteBody;
+import com.example.demo.controller.member.requestbody.MemberSetActivityBody;
 import com.example.demo.entity.MemberEntity;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.service.HistoryService;
@@ -47,11 +50,11 @@ public class MemberController {
         return memberService.updateMember(name, displayName, unpayedAmount, attribute);
     }
 
-    @PostMapping
-    @RequestMapping("/member/delete")
+    @PostMapping("/member/delete")
+    @ResponseBody
     public String deleteMember(
-            @RequestParam("name") String name) {
-        return memberService.deleteMember(name);
+            @RequestBody MemberDeleteBody memberDeleteBody) {
+        return memberService.deleteMember(memberDeleteBody.name);
     }
 
     @RequestMapping("/member")
@@ -71,13 +74,12 @@ public class MemberController {
         return memberService.getMemberWithUnpayedAmount();
      }
 
-     @PostMapping
-    @RequestMapping("/member/setactivity")
+    @PostMapping("/member/setactivity")
+    @ResponseBody
      public String setMemberActivity(
-        @RequestParam(name="name") String name,
-        @RequestParam(name="activity") boolean activity){
-        MemberEntity memberEntity= memberService.findByName(name);
-        memberEntity.setActive(activity);
+        @RequestBody MemberSetActivityBody memberSetActivityBody){
+        MemberEntity memberEntity= memberService.findByName(memberSetActivityBody.name);
+        memberEntity.setActive(memberSetActivityBody.activity);
         memberRepository.save(memberEntity);
         return "success";
      }
