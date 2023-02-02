@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.controller.item.requestbody.ItemAddRequestBody;
+import com.example.demo.controller.item.requestbody.ItemDeleteBody;
+import com.example.demo.controller.item.requestbody.ItemSetActivityBody;
+import com.example.demo.controller.item.requestbody.ItemUpdateBody;
 import com.example.demo.entity.ItemEntity;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.service.ItemService;
@@ -41,24 +45,25 @@ public class ItemController {
         return itemService.addItem(itemAddRequestBody.name,int_sellingPrice,int_costPrice,itemAddRequestBody.grouping);
     }
 
-    @PostMapping
-    @RequestMapping("/item/delete")
+    @PostMapping("/item/delete")
+    @ResponseBody
     public String deleteItem(
-        @RequestParam("name") String name
+        @RequestBody ItemDeleteBody itemDeleteBody
     ){
-        return itemService.deleteItem(name);
+        return itemService.deleteItem(itemDeleteBody.name);
     }
 
-    @PostMapping
-    @RequestMapping("/item/update")
+    @PostMapping("/item/update")
+    @ResponseBody
     public String updateItem(
-        @RequestParam(name="name") String name,
-        @RequestParam(name="sellingPrice",defaultValue="") String sellingPrice,
-        @RequestParam(name="costPrice",defaultValue="") String costPrice,
-        @RequestParam(name="grouping",defaultValue="") String grouping,
-        @RequestParam(name="salesFigure",defaultValue="") String salesFigure
+        @RequestBody ItemUpdateBody itemUpdateBody
     ){
-        return itemService.updateItem(name,sellingPrice,costPrice,grouping,salesFigure);
+        return itemService.updateItem(
+            itemUpdateBody.name,
+            itemUpdateBody.sellingPrice,
+            itemUpdateBody.costPrice,
+            itemUpdateBody.grouping,
+            itemUpdateBody.salesFigure);
     }
 
 
@@ -68,13 +73,12 @@ public class ItemController {
         return itemService.getItemRanking();
     }
 
-    @PostMapping
-    @RequestMapping("/item/setactivity")
+    @PostMapping("/item/setactivity")
+    @ResponseBody
      public String setMemberActivity(
-        @RequestParam(name="id") String name,
-        @RequestParam(name="activity") boolean activity){
-        ItemEntity itemEntity= itemService.findByName(name);
-        itemEntity.setActive(activity);
+        @RequestBody ItemSetActivityBody itemSetActivityBody){
+        ItemEntity itemEntity= itemService.findByName(itemSetActivityBody.id);
+        itemEntity.setActive(itemSetActivityBody.activity);
         itemRepository.save(itemEntity);
         return "success";
      }
