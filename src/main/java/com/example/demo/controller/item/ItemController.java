@@ -3,8 +3,10 @@ package com.example.demo.controller.item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.ItemEntity;
@@ -29,17 +31,14 @@ public class ItemController {
        return itemService.getItemList(grouping);
     }
 
-    @PostMapping
-    @RequestMapping("/item/add")
+    @PostMapping("/item/add")
+    @ResponseBody
     public String addItemList(
-        @RequestParam("name") String name,
-        @RequestParam("sellingprice") String sellingPrice,
-        @RequestParam("costprice") String costPrice,
-        @RequestParam("grouping") String grouping
+        @RequestBody ItemAddRequestBody itemAddRequestBody
     ){
-        int int_sellingPrice = Integer.parseInt(sellingPrice);
-        int int_costPrice = Integer.parseInt(costPrice);
-        return itemService.addItem(name,int_sellingPrice,int_costPrice,grouping);
+        int int_sellingPrice = Integer.parseInt(itemAddRequestBody.sellingprice);
+        int int_costPrice = Integer.parseInt(itemAddRequestBody.costprice);
+        return itemService.addItem(itemAddRequestBody.name,int_sellingPrice,int_costPrice,itemAddRequestBody.grouping);
     }
 
     @PostMapping
