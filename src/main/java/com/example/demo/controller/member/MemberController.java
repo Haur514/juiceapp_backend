@@ -3,8 +3,10 @@ package com.example.demo.controller.member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.MemberEntity;
@@ -25,13 +27,14 @@ public class MemberController {
     @Autowired
     HistoryService historyService;
 
-    @PostMapping
-    @RequestMapping("/member/add")
+    @PostMapping("/member/add")
+    @ResponseBody
     public String addMember(
-            @RequestParam(name = "name") String name,
-            @RequestParam(name = "displayName") String displayName,
-            @RequestParam(name = "attribute") String attribute) {
-        return memberService.addMember(name, displayName, attribute);
+            @RequestBody MemberAddRequestBody memberAddRequestBody) {
+        return memberService.addMember(
+            memberAddRequestBody.name, 
+            memberAddRequestBody.displayName, 
+            memberAddRequestBody.attribute);
     }
 
     @PostMapping

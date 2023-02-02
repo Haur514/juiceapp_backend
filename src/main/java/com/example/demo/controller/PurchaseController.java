@@ -4,8 +4,9 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.ItemEntity;
@@ -17,6 +18,7 @@ import com.example.demo.service.HistoryService;
 import com.example.demo.service.ItemService;
 import com.example.demo.service.MemberService;
 import com.example.demo.service.SalesService;
+import com.google.gson.Gson;
 
 @RestController
 @EnableAutoConfiguration
@@ -32,23 +34,27 @@ public class PurchaseController {
     @Autowired SalesService salesService;
 
 
-    @RequestMapping("/purchase")
+    @PostMapping("/purchase")
+    @ResponseBody
     public String purchaseItem(
-        @RequestParam("name") String name,
-        @RequestParam("item") String item
+        @RequestBody PurchaseData purchaseData
     ){
+        String name = purchaseData.name;
+        String item = purchaseData.item;
+
+
         ItemEntity purchasedItem = itemRepository.findByName(item);
         if(purchasedItem == null){
-            return "failed";
+            return "Item failed";
         }
         MemberEntity purchasedMember = memberRepository.findByName(name);
         if(purchasedMember == null){
-            return "failed";
+            return "Member failed";
         }
         int price = purchasedItem.getSellingPrice();
         
         if(!canPurchase(name, item, price)){
-            return "failed";
+            return "Purchase failed";
         }
 
         historyService.insertHistory(name,item,price);
@@ -57,7 +63,7 @@ public class PurchaseController {
         // salesDBの更新
         salesService.updateSales(name, new Date(), price);
         
-        return "success";
+        return new Gson().toJson("success");
     }
 
     // 購入処理を進める前に，購入が可能かどうかを判定する．
