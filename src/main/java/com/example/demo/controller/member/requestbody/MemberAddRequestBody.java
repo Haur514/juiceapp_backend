@@ -1,4 +1,4 @@
-package com.example.demo.controller.member;
+package com.example.demo.controller.member.requestbody;
 
 public class MemberAddRequestBody {
     public String name;
