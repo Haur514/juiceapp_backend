@@ -1,4 +1,4 @@
-package io.github.haur514.controller;
+package io.github.haur514.controller.purchase;
 
 import java.util.Date;
 
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
+import io.github.haur514.controller.purchase.requestbody.PurchaseData;
 import io.github.haur514.entity.ItemEntity;
 import io.github.haur514.entity.MemberEntity;
 import io.github.haur514.repository.ItemRepository;
